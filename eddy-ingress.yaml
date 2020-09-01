@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: eddy-ingress
+  annotations:
+    INGRESS.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/grpc-backend: "true"
+spec:
+  rules:
+  # 监听到eddy-take-order.com后转发到take-order这个service的80端口
+  - host: eddy-take-order.com
+    http:
+      paths: 
+      - backend: 
+          serviceName: take-order
+          servicePort: 80
+  - host: eddy-take-order-fast.com
+    http:
+      paths:
+      - backend:
+          serviceName: take-order-fast
+          servicePort: 80
+  - host: eddy-shop.com
+    http:
+      paths:
+      - backend:
+          serviceName: shop
+          servicePort: 80

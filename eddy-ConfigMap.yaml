@@ -1,0 +1,17 @@
+# 这里用于配置代码里寻找serviceName，每个deployment都可以按需加载这个文件
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eddy-config
+data:
+  fast_mode: "0"
+  mq_service_service_name: "mq-service"
+  take_order_service_name: "take-order"
+  take_order_fast_service_name: "take-order-fast"
+  take_order_url: "eddy-take-order.com"
+  take_order_fast_url: "eddy-take-order-fast.com"
+  mysql_addr: "<MYSQL_ADDR>"
+  kafka_addr: "<KAFKA_ADDR>"
+  redis_addr: "<REDIS_ADDR>"
+  es_addr   : "<ES_ADDR>"
+  hbase_addr: "<HBASE_ADDR>"

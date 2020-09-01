@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: take-order
+spec:
+  hosts:
+    - take-order
+  http:
+  - route:
+    - destination:
+        host: take-order
+      weight: 50
+    - destination:
+        host: take-order-fast
+      weight: 50
+---

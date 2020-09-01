@@ -1,0 +1,102 @@
+#通过配置serviceEntry访问外部服务
+
+##################################################################################################
+# kafka
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: kafka-external
+spec:
+  hosts:
+    - kafka
+  addresses:
+    - <KAFKA_ADDR>/32
+  ports:
+    - name: tcp
+      number: 9092
+      protocol: tcp
+  location: MESH_EXTERNAL
+---
+
+##################################################################################################
+# mysql
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mysql-external
+spec:
+  hosts:
+    # 内部访问得到名字
+    - mysql-db
+  addresses:
+    # 映射到外部的IP
+    - <MYSQL_ADDR>/32
+  ports:
+    - name: tcp
+      number: 3306
+      protocol: tcp
+  location: MESH_EXTERNAL
+---
+##################################################################################################
+# redis
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: redis-external
+spec:
+  hosts:
+    # 内部访问得到名字
+    - mysql-db
+  addresses:
+    # 映射到外部的IP
+    - <REDIS_ADDR>/32
+  ports:
+    - name: tcp
+      number: 6379
+      protocol: tcp
+  location: MESH_EXTERNAL
+---
+##################################################################################################
+# es
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: es-external
+spec:
+  hosts:
+    # 内部访问得到名字
+    - es-db
+  addresses:
+    # 映射到外部的IP
+    - <ES_ADDR>/32
+  ports:
+    - name: tcp
+      number: 9200
+      protocol: tcp
+  location: MESH_EXTERNAL
+---
+
+##################################################################################################
+# hbase
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: hbase-external
+spec:
+  hosts:
+    # 内部访问得到名字
+    - hbase-db
+  addresses:
+    # 映射到外部的IP
+    - <HBASE_ADDR>/32
+  ports:
+    - name: tcp
+      number: 2181
+      protocol: tcp
+  location: MESH_EXTERNAL
+---
