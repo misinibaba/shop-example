@@ -1,0 +1,67 @@
+##################################################################################################
+# take_order service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: mq-service
+  labels:
+    app: mq-service
+    service: mq-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 31227
+      name: grpc #重要
+      # 测试用端口
+    - port: 30001
+      targetPort: 30001
+      name: grpc-test
+  selector:
+    app: mq-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # 这里如果deployment的名字不变的话，那么下面的selector如果变了，则会出错
+  # 那么如果要实现滚动更新版本的话，要么就name和selector的都不变，但是这样就不便于做发布测试了，因为至少得留下以前得版本
+  # 所以这里就会保留多个deployment维护不同版本的pod,然后通过virtualService来负责路由；或者不用istio的话，就是不同版本deployment的template取一样的label,由service来随机发送
+  name: mq-service-v117
+  labels:
+    app: mq-service
+    version: v117
+spec:
+  replicas: 1
+  selector:
+    # 指定这个deployment挂俩哪些pod
+    matchLabels:
+      app: mq-service
+      version: v117
+  template:
+    metadata:
+      # 为即将新疆的pod附加label
+      labels:
+        app: mq-service
+        version: v117
+    spec:
+      containers:
+        - name: mq-service
+          image: eddy/mq-service:v117
+          imagePullPolicy: Never
+          # 有命令行
+          tty: true
+          stdin: true
+          ports:
+            - containerPort: 31227
+              name: grpc # 重要
+              protocol: TCP
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+          envFrom:
+          - configMapRef:
+              name: eddy-config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: eddy-config

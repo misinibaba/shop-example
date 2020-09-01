@@ -1,0 +1,68 @@
+{{define "order/user_list.tmpl"}}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta charset="utf-8">
+    <title></title>
+    <script src="/statics/js/jquery.js"></script>
+    <style>
+        .bg {
+            background-color: #E8EAED;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body id="list">
+<div class="bg" >
+</div>
+<table>
+    {{range .orderList}}
+        <tr>
+           <td>{{.ID}}</td>
+           <td>{{.GoodsId}}</td>
+           <td>{{.UserId}}</td>
+           <td>{{.Status}}</td>
+           <td>{{.CreateAt}}</td>
+           <td>
+               <button onclick="pay()">付款</button>
+           </td>
+        </tr>
+    {{end}}
+</table>
+<a href="/api/v1/goods/1">去买东西</a>
+</body>
+<script>
+    function pay() {
+        $.ajax({
+            url:'http://localhost:31230',
+            type:'post',
+            data:{
+                orderId:{{.ID}},
+                userId:{{.UserId}}
+            },
+            processData:false,
+            contentType:false,
+            success:function(data) {
+                console.log(data)
+            },
+            error:function (errorData) {
+                let errorBody = JSON.parse(errorData.responseText);
+                Object.values(errorBody).forEach(function (content) {
+                    let html = '<div class="alert alert-danger alert-dismissable ">' +
+                        '  <button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '  <strong>错误： </strong>' + content +
+                        '</div>';
+                    $('.tab-content').prepend(html);
+                })
+            }
+        })
+    }
+
+</script>
+
+</html>
+{{end}}

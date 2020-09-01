@@ -1,0 +1,44 @@
+{{define "goods/list.tmpl"}}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta charset="utf-8">
+    <title></title>
+    <script src="/statics/js/jquery.js"></script>
+    <style>
+        .bg {
+            background-color: #E8EAED;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body id="list">
+<div class="bg" >
+</div>
+
+<button onclick="pay()">立即抢购</button>
+<a href="/api/v1/user/1/order">去看订单</a>
+<a href="/api/v1/order">去看所有订单</a>
+</body>
+<script>
+    function pay() {
+        $.ajax({
+            url: {{.take_order_url}} + '/checkCount',
+            type:'get',
+            data:{
+                goodsId:{{.goodsId}}
+            },
+            success:function(data) {
+                console.log(data)
+            }
+        })
+    }
+
+</script>
+
+</html>
+{{end}}

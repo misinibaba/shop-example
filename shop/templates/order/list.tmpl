@@ -1,0 +1,63 @@
+{{define "order/list.tmpl"}}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta charset="utf-8">
+    <title></title>
+    <script src="/statics/js/jquery.js"></script>
+    <style>
+        .bg {
+            background-color: #E8EAED;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body id="list">
+<div class="bg" >
+</div>
+
+<form action="/api/v1/order" method="post">
+    描述：<input type="text" value=""  name="describe"/>
+    用户ID：<input type="text" value="" name="user_id"/>
+    订单Id：<input type="text" value="" name="order_id"/>
+    创建时间：
+    <select name="time_type" class="form-control input-sm inline" style="width: 100px;">
+        <option value="0">最近30天</option>
+        <option value="1" >最近一年</option>
+        <option value="2">全部</option>
+    </select>
+    状态：
+    <select name="status" class="form-control input-sm inline" style="width: 100px;">
+        <option value="1">已付款</option>
+        <option value="2" >已发货</option>
+        <option value="3">已签收</option>
+        <option value="0">全部</option>
+    </select>
+    <input type="submit" value="提交">
+</form>
+
+<br>
+<a href="/api/v1/goods/1">去买东西</a>
+<br>
+<table>
+    {{range $key, $value := .orderList}}
+        <tr>
+            <td>
+                Id:{{index $value "id"}}
+                用户Id:{{index $value "userId"}}
+                货物Id:{{index $value "goodsId"}}
+                描述:{{index $value "describe"}}
+            </td>
+        </tr>
+    {{end}}
+</table>
+</body>
+<script>
+
+</script>
+</html>
+{{end}}

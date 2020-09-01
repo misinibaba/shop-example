@@ -1,0 +1,27 @@
+syntax = "proto3"; //使用proto3版本
+
+//用于golang等语言的package配置
+package mqservicegrpc;
+
+//定义服务接口，其中rpc关键字表示 rpc 接口，用于生成grpc接口代码
+service Sync {
+    rpc PreSendMsg (SyncRequest) returns(SyncResponse) {}
+    rpc CommitMsg (SyncRequest) returns(SyncResponse) {}
+}
+
+//定义请求数据类型, repeated最终会转换成golang中的数组/切片
+message SyncRequest {
+    repeated SyncData data= 1;
+}
+
+//定义返回的数据类型
+message SyncResponse {
+    repeated SyncData data= 1;
+}
+
+//定义实体数据类型，用type字段表示请求的数据类型，用data字段保存请求的数据或者返回的数据
+//map<string, string>最终会转换成golang中的map[string]string类型
+message SyncData {
+    int32 type = 1;
+    map<string, string> data = 2;
+}

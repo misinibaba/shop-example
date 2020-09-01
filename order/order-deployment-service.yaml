@@ -1,0 +1,69 @@
+##################################################################################################
+# take_order service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  labels:
+    app: order
+    service: order
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http # 这里不要写错了
+      # 测试用端口
+    - port: 30001
+      targetPort: 30001
+      name: http-test
+  selector:
+    app: order
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # 这里如果deployment的名字不变的话，那么下面的selector如果变了，则会出错
+  # 那么如果要实现滚动更新版本的话，要么就name和selector的都不变，但是这样就不便于做发布测试了，因为至少得留下以前得版本
+  # 所以这里就会保留多个deployment维护不同版本的pod,然后通过virtualService来负责路由；或者不用istio的话，就是不同版本deployment的template取一样的label,由service来随机发送
+  name: order-v118
+  labels:
+    app: order
+    version: v118
+spec:
+  replicas: 1
+  selector:
+    # 指定这个deployment挂俩哪些pod
+    matchLabels:
+      app: order
+      version: v118
+  template:
+    metadata:
+      # 为即将新疆的pod附加label
+      labels:
+        app: order
+        version: v118
+    spec:
+      hostAliases:
+      - ip: "192.168.93.10"
+        hostnames:
+        - "regionserver"
+      containers:
+        - name: order
+          image: eddy/order:v118
+          imagePullPolicy: Never
+          # 有命令行
+          tty: true
+          stdin: true
+          ports:
+            - containerPort: 31226
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+          envFrom:
+          - configMapRef:
+              name: eddy-config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: eddy-config
