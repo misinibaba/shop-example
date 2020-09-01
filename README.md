@@ -25,17 +25,12 @@
 - kafka
 
 ### 部署方式
-#### 一、
-解压jobs.tar.gz,然后jenkins导入解压后的目录
+#### 解压jobs.tar.gz,然后jenkins导入解压后的目录
 
-#### 二、
-修改Jenkins脚本中的安装位置
+#### 修改Jenkins脚本中的安装位置
 
-#### 三、
-根据eddy-ingress.yaml中的主机名配置，在服务器的中配置相应的映射
+#### 根据eddy-ingress.yaml中的主机名配置，在服务器的中配置相应的映射
 
-#### 四、
-开启istio自动注入
+#### 开启istio自动注入
 
-#### 五、
-运行Jenkins部署脚本
+#### 运行Jenkins部署脚本
