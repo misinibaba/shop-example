@@ -5,7 +5,7 @@
  数据库缓存等由于实验环境单机服务器资源限制，所以选择了外部搭建
 ```
 - 配置管理:configMap
-- 熔断限流:istio
+- 熔断限流:VirtualService,DestinationRule
 - 网关:ingress
 - 服务发现:service
 - 日志中心:<暂缺>
