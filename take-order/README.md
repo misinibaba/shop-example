@@ -2,4 +2,4 @@
 ```
 创建订单到队列中
 ```
-![image]()
+![image](https://github.com/misinibaba/shop-example/blob/master/static/take-order.png?raw=true)
