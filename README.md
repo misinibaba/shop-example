@@ -25,7 +25,7 @@
 - kafka
 
 ### 部署方式
-#### 解压jobs.tar.gz,然后jenkins导入解压后的目录
+#### 解压static/jenkins-pipeline.tar.gz,然后jenkins导入解压后的目录
 
 #### 修改Jenkins脚本中的安装位置
 
