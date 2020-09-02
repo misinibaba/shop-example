@@ -1,4 +1,5 @@
 # 介绍
+#### 微服务实验学习环境，还在完善中
 ```
  每个文件夹都是一个微服务，依赖k8s和istio，这里主要是一个下单到展示的demo
  由于我这里使用的minikube作为实验环境，没有外部负载均衡，未使用istio-ingressgateway，用的原生ingress
