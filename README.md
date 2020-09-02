@@ -4,6 +4,8 @@
  由于我这里使用的minikube作为实验环境，没有外部负载均衡，未使用istio-ingressgateway，用的原生ingress
  数据库缓存等由于实验环境单机服务器资源限制，所以选择了外部搭建
 ```
+![image](https://github.com/misinibaba/shop-example/blob/master/static/overview.png?raw=true)
+
 - 配置管理:configMap
 - 熔断限流:VirtualService,DestinationRule
 - 网关:ingress
