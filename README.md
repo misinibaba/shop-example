@@ -14,7 +14,7 @@
 - 服务发现:service
 - 日志中心:<暂缺>
 - 服务编排:deployment
-- 监控：istio自带的grafana,promethus,zipklin等
+- 监控：grafana,promethus,zipklin等
 
 ## 依赖软件
 - kubernetes
