@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: take-order
+spec:
+  hosts:
+    # 客户端请求的目的地址。内部访问时与k8s service名称相同；外部访问时，与外部客户端的目的地相同
+    # 通常与k8s service同名
+    # 用户的请求被拦截，先访问虚拟服务，然后再由虚拟服务转发到destination对应的service
+    - take-order
+  http:
+    - route:
+        - destination:
+            host: take-order #对应k8s的同名service，与DestinationRule的host相同，军注册到注册中心的service表项
+            subset: v1 #对应destination rule中的服务子集，有了subset就会用到destinationRule
+            weight: 90
+        timeout: 3s
+        - destination:
+            host: take-order
+            subset: v2
+            weight: 10
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: take-order
+spec:
+  hosts: take-order
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+  trafficPolicy:
+    # 限流
+    connectionPool:
+      tcp:
+        maxConnections: 10 # 到目标主机的Http1/tcp最大连接数量，不作用于http2,因为http2只建立一次长连接
+        connectionTimeout: 30ms
+      http1:
+        http1MaxPendingRequests: 10 # http请求pending状态最大数，从应用容器发来的http请求的最大等待转发数
+        http2MaxRequests: 10 # 后端请求的最大数量
+        MaxRequestsPerConnection: 10 # 在一定事件内限制对后端服务发起的最大请求数，如果超过这个限制，就会开启限流；如果将这参数设置为1，则会禁止keepalive特性
+    # 熔断
+    outlierDetection:
+      consecutiveErrors: 7 # 从连接池开始拒绝连接，已经连接失败的次数
+      interval: 5m # 拒绝访问扫描的时间间隔，即在interval内连续发生consecutiveErrors个错误，则触发熔断
+      baseEjectionTime: 180s # 最短拒绝访问时长。
+      maxEjectionPercent: 100 # 服务在负载均衡池中被拒绝访问的最大百分比
